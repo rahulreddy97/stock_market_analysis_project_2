@@ -1,0 +1,6 @@
+flask
+scikit-learn
+numpy
+matplotlib
+pandas
+pandas-datareader

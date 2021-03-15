@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stock Price Prediction</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <script type="text/javascript">
+        window.onload = function () {
+            let dataPoints = [];
+            let linearPoints = [];
+            let poly2Points = [];
+            let poly3Points = []; 
+            let knnPoints = [];
+
+            let p_data = {{ plot_data|tojson|safe }};
+            let l_data = {{ linear_data|tojson|safe }};
+            let p2_data = {{ poly2_data|tojson|safe }};
+            let p3_data = {{ poly3_data|tojson|safe }};
+            let k_data = {{ knn_data|tojson|safe }};
+
+            let plot_data = JSON.parse(p_data);
+            let linear_data = JSON.parse(l_data);
+            let poly2_data = JSON.parse(p2_data);
+            let poly3_data = JSON.parse(p3_data);
+            let knn_data = JSON.parse(k_data);
+
+            for (let pkey in plot_data) {
+                dataPoints.push({
+                    y: plot_data[pkey],
+                    x: parseInt(pkey)
+                })
+            }
+            for (let l_key in linear_data) {
+                linearPoints.push({
+                    y: linear_data[l_key],
+                    x: parseInt(l_key)
+                })
+            }
+            for (let p2_key in poly2_data) {
+                poly2Points.push({
+                    y: poly2_data[p2_key],
+                    x: parseInt(p2_key)
+                })
+            }
+            for (let p3_key in poly3_data) {
+                poly3Points.push({
+                    y: poly3_data[p3_key],
+                    x: parseInt(p3_key)
+                })
+            }
+            for (let k_key in knn_data) {
+                knnPoints.push({
+                    y: knn_data[k_key],
+                    x: parseInt(k_key)
+                })
+            }
+
+            let chart = new CanvasJS.Chart("chartContainer",
+                {
+                    connectNullData: true,
+                    zoomEnabled: true,
+                    title: {
+                        text: "Stock Price Prediction - (" + '{{ comp }}' + ")"
+                    },
+                    axisY2: {
+                        {#title: "Stock Price",#}
+                        prefix: "$",
+                        includeZero: false
+                    },
+                    toolTip: {
+                        shared: true
+                    },
+                    legend: {
+                        cursor: "pointer",
+                        verticalAlign: "top",
+                        horizontalAlign: "center",
+                        dockInsidePlotArea: true,
+                        {#itemclick: toogleDataSeries#}
+                    },
+                    axisX: {
+                        {#title: "Duration",#}
+                    },
+                    data: [{
+                        type: "line",
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        name: "Adj Close",
+                        xValueType: "dateTime",
+                        xValueFormatString: "DD MMMM YYYY",
+                        yValueFormatString: "$###",
+                        dataPoints: dataPoints
+                    }, {
+                        type: "line",
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        markerType: "none",
+                        name: "Linear Prediction",
+                        xValueType: "dateTime",
+                        xValueFormatString: "DD MMMM YYYY",
+                        yValueFormatString: "$###",
+                        dataPoints: linearPoints
+                    }, {
+                        type: "line",
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        markerType: "none",
+                        name: "Poly2 Prediction",
+                        xValueType: "dateTime",
+                        xValueFormatString: "DD MMMM YYYY",
+                        yValueFormatString: "$###",
+                        dataPoints: poly2Points
+                    }, {
+                        type: "line",
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        markerType: "none",
+                        name: "Poly3 Prediction",
+                        xValueType: "dateTime",
+                        xValueFormatString: "DD MMMM YYYY",
+                        yValueFormatString: "$###",
+                        dataPoints: poly3Points
+                    }, {
+                        type: "line",
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        markerType: "none",
+                        name: "KNN Prediction",
+                        xValueType: "dateTime",
+                        xValueFormatString: "DD MMMM YYYY",
+                        yValueFormatString: "$###",
+                        dataPoints: knnPoints
+                    }]
+                });
+            chart.render();
+        };
+    </script> -->
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <style>
+        button {
+  display: block;
+  margin: 0 auto;
+  padding: .6em .8em;
+  /* Font-size is the root value that determines size of spinner parts. 
+Change this to whatever you want and spinner elements will size to match. */
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: .4em;
+  border: none;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: all 1s;
+}
+
+/* focus/disabled styles, you can change this for accessibility */
+button:focus, button:disabled {
+  outline: none;
+  background: #aaa;
+}
+
+/* This is the space for the spinner to appear, applied to the button */
+.spin {
+  padding-left: 2.5em;
+  display: block;
+}
+
+/* position of the spinner when it appears, you might have to change these values */
+.spin .spinner {
+  left: -.6em;
+  top: .4em;
+  width: 2.5em;
+  display: block;
+  position: absolute;
+}
+
+/* spinner animation */
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  
+  100% {
+    transform: rotate(360deg);
+  }
+}
+#image{
+    display:none;
+}
+/* The actual spinner element is a pseudo-element */
+.spin .spinner::before {
+  content: "";
+  width: 1.5em; /* Size of the spinner */
+  height: 1.5em; /* Change as desired */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: solid .35em #999; /* Thickness/color of spinner track */
+  border-bottom-color: #555; /* Color of variant spinner piece */
+  animation: .8s linear infinite spinner; /* speed of spinner */
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* optional, but it will affect the size if changed */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+    </style>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script>
+    let btn = document.querySelector('button');
+
+    btn.addEventListener('click', function () {
+    // form submission starts
+    // button is disabled
+    btn.classList.add('spin');
+    btn.disabled = true;
+    
+    // This disables the whole form via the fieldset
+    btn.form.firstElementChild.disabled = true;
+    
+    // this setTimeout call mimics some asyncronous action
+    // you would have something else here
+    window.setTimeout(function () {
+        // when asyncronous action is done, remove the spinner
+        // re-enable button/fieldset
+        btn.classList.remove('spin');
+        btn.disabled = false;
+        btn.form.firstElementChild.disabled = false;
+    }, 4000);
+    }, false);
+</script>
+<h1 style= text-align:center>Stock News analysis</h1>
+<div class="container">
+    <div class="row mt-3 mb-5 h-100 bg-primary pb-3 pt-3">
+        <div class="col-md-4 my-auto">
+            <form class="form-inline">
+                <div class="form-group mx-sm-3">
+                    <input type="text" name="comp" class="form-control" placeholder="eg: AAPL, GOOG">
+                </div>
+                <button type="submit" >Predict<span class="spinner"></span></button>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <div id="chartContainer">
+            <img id=image src="image.png" alt="">
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
